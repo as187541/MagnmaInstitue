@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MagnmaInstitute - Your Partner in Education</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    />
+    <link rel="stylesheet" href="chatbot.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    
+
+    <style>
+      /* --- All existing styles are unchanged --- */
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Urbanist", sans-serif;
+      }
+      :root {
+        --primary-accent: #0a4d68;
+        --primary-text: #1d2a39;
+        --secondary-text: #2f9564;
+        --light-bg: #f7fafc;
+        --white: #ffffff;
+        --border-color: #dee2e6;
+        --nav-bg: var(--white);
+        --logo-text: #0e7843;
+        --logo-span: var(--primary-accent);
+        --shadow-1: 0 4px 15px hsla(210, 30%, 60%, 0.1);
+        --shadow-2: 0 10px 25px hsla(210, 30%, 60%, 0.15);
+        --radius-8: 8px;
+        --fw-500: 500;
+        --fw-700: 700;
+        --fw-800: 800;
+        --fs-1: 3.5rem;
+        --fs-2: 2.8rem;
+        --fs-5: 1.5rem;
+        --fs-6: 1.1rem;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background-color: var(--white);
+        color: var(--secondary-text);
+        padding-top: 80px;
+        transition: background-color 0.3s;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: var(--primary-text);
+        transition: color 0.3s;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5%;
+        background-color: var(--nav-bg);
+        z-index: 1000;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .logo a {
+        font-size: 2rem;
+        font-weight: var(--fw-800);
+        color: var(--logo-text);
+      }
+      .logo a span {
+        color: var(--logo-span);
+      }
+      nav .nav-items-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      nav .hero-links a {
+        padding: 5px 10px;
+        font-size: 1.1rem;
+        font-weight: var(--fw-500);
+      }
+      .hero-btn a {
+        padding: 12px 25px;
+        font-size: 1rem;
+        font-weight: var(--fw-700);
+        color: var(--white);
+        background-color: var(--primary-accent);
+        border: 2px solid var(--primary-accent);
+        border-radius: var(--radius-8);
+        transition: background-color 0.3s, color 0.3s;
+        white-space: nowrap;
+      }
+      .hero-btn a:hover {
+        background-color: transparent;
+        color: var(--primary-accent);
+      }
+      #theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.4rem;
+        color: var(--secondary-text);
+        padding: 5px;
+        line-height: 1;
+      }
+      .hamburger-menu {
+        display: none;
+      }
+      section {
+        padding: 80px 5%;
+      }
+      .section-heading {
+        font-size: var(--fs-2);
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      .section-intro {
+        font-size: var(--fs-6);
+        max-width: 800px;
+        margin: 0 auto 30px auto;
+        text-align: center;
+        line-height: 1.7;
+      }
+      section.light-bg {
+        background-color: var(--light-bg);
+      }
+      footer {
+        background-color: var(--primary-text);
+        padding: 50px 5%;
+        color: var(--white);
+        text-align: center;
+      }
+      body[data-theme="original"] {
+        --primary-accent: #525ee0;
+        --primary-text: #231f41;
+        --secondary-text: #737373;
+        --light-bg: #fff2e9;
+        --nav-bg: #fff2e9;
+        --logo-text: #19307a;
+        --logo-span: #f64c4c;
+      }
+      body[data-theme="original"] .hero-btn a {
+        background-color: var(--primary-text);
+        border-color: var(--primary-text);
+      }
+      .in-section-search-bar {
+        margin-bottom: 50px;
+      }
+      .search-input {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        display: block;
+        padding: 16px 30px;
+        font-size: 1.1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 50px;
+      }
+      .no-results {
+        display: none;
+        text-align: center;
+        padding: 25px;
+        margin-top: 20px;
+        border-radius: var(--radius-8);
+        background-color: #fff9e3;
+        color: #8a6d3b;
+      }
+      .hero-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        background-color: var(--light-bg);
+        min-height: calc(100vh - 80px);
+      }
+      .hero-text h1 {
+        font-size: var(--fs-1);
+      }
+      .hero-text h3 {
+        font-size: 1.4rem;
+        margin-bottom: 40px;
+      }
+      .hero-img img {
+        animation: float 4s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+      .colleges-container,
+      .courses-grid {
+        display: grid;
+        gap: 30px;
+      }
+      .colleges-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      .college-item {
+        display: block;
+        text-align: center;
+        border-radius: var(--radius-8);
+        overflow: hidden;
+        box-shadow: var(--shadow-1);
+        background-color: var(--white);
+        border: 1px solid var(--border-color);
+        transition: transform 0.3s ease;
+      }
+      .college-item:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-2);
+      }
+      .college-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+      }
+      .college-item img.slideshow-active {
+        object-fit: cover;
+        padding: 0;
+      }
+      .college-item-text {
+        padding: 25px 20px;
+      }
+      .courses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      .course-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 30px;
+        border-radius: var(--radius-8);
+        background-color: var(--white);
+        box-shadow: var(--shadow-1);
+        min-height: 220px;
+        border: 1px solid var(--border-color);
+      }
+      .course-card img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+      }
+      .view-more-container {
+        text-align: center;
+        margin-top: 40px;
+      }
+      .view-more-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        font-size: 1rem;
+        font-weight: var(--fw-700);
+        color: var(--white);
+        background-color: var(--primary-accent);
+        border: 2px solid var(--primary-accent);
+        border-radius: var(--radius-8);
+        transition: background-color 0.3s, color 0.3s;
+      }
+      .view-more-btn:hover {
+        background-color: transparent;
+        color: var(--primary-accent);
+      }
+      .service-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+      }
+      .service-box {
+        background-color: var(--white);
+        padding: 30px;
+        border-radius: var(--radius-8);
+        text-align: center;
+        box-shadow: var(--shadow-1);
+        border: 1px solid var(--border-color);
+      }
+      .service-box img {
+        height: 80px;
+        margin: 0 auto 25px auto;
+      }
+      .service-box h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+      }
+      .about-container {
+        display: flex;
+        align-items: center;
+        gap: 5%;
+      }
+      .about-text p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        text-align: justify;
+        margin-bottom: 30px;
+      }
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 50px;
+        align-items: flex-start;
+        margin-bottom: 60px;
+      }
+      .office-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .office-box {
+        padding: 20px;
+        background-color: var(--white);
+        border-radius: var(--radius-8);
+        box-shadow: var(--shadow-1);
+        border: 1px solid var(--border-color);
+        border-left: 5px solid transparent;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      }
+      .office-box:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-2);
+      }
+      .office-box.active {
+        border-left-color: var(--primary-accent);
+        box-shadow: var(--shadow-2);
+      }
+      .office-box .fa {
+        margin-right: 15px;
+        margin-top: 5px;
+        color: var(--primary-accent);
+      }
+      .map-container {
+        width: 100%;
+        height: 100%;
+        min-height: 480px;
+        border-radius: var(--radius-8);
+        overflow: hidden;
+        box-shadow: var(--shadow-1);
+      }
+      .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .form-title {
+        font-size: var(--fs-5);
+        margin-bottom: 1.5rem;
+      }
+      .form label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .form input,
+      .form select,
+      .form textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: var(--radius-8);
+        border: 1px solid var(--border-color);
+      }
+      .form .form-submit-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--white);
+        background-color: var(--primary-accent);
+        border-radius: var(--radius-8);
+        border: 2px solid var(--primary-accent);
+        transition: background-color 0.3s, color 0.3s;
+        cursor: pointer;
+      }
+      .form .form-submit-btn:hover {
+        background-color: transparent;
+        color: var(--primary-accent);
+      }
+      .up-footer,
+      .footer-social-links,
+      .foot-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+      .footer-social-links {
+        margin-bottom: 30px;
+      }
+      .footer-social-links a {
+        color: white;
+        width: 45px;
+        height: 45px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+      }
+      footer hr {
+        margin: 30px 0;
+        border: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .bottom-footer {
+        padding-top: 20px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      @media screen and (max-width: 992px) {
+        body {
+          padding-top: 70px;
+        }
+        nav {
+          height: 70px;
+        }
+        .hero-section,
+        .about-container {
+          flex-direction: column;
+          text-align: center;
+        }
+        .contact-grid {
+          grid-template-columns: 1fr;
+        }
+        .map-container {
+          order: -1;
+          min-height: 300px;
+        }
+        nav .hero-btn,
+        nav .nav-items-container .hero-links {
+          display: none;
+        }
+        .hamburger-menu {
+          display: block;
+          cursor: pointer;
+          z-index: 1001;
+        }
+        .ham-bar {
+          width: 25px;
+          height: 3px;
+          background-color: var(--primary-text);
+          border-radius: 3px;
+          margin: 5px 0;
+          transition: 0.4s;
+        }
+        .hamburger-menu.active .bar-top {
+          transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger-menu.active .bar-mid {
+          opacity: 0;
+        }
+        .hamburger-menu.active .bar-bottom {
+          transform: rotate(45deg) translate(-5px, -6px);
+        }
+        .hero-links {
+          position: fixed;
+          top: 70px;
+          right: -100%;
+          width: 100%;
+          height: calc(100vh - 70px);
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(5px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          transition: right 0.4s ease-in-out;
+          z-index: 999;
+        }
+        .hero-links.active {
+          right: 0;
+        }
+        .hero-links a {
+          color: var(--primary-text);
+          font-size: 1.8rem;
+          padding: 15px 0;
+        }
+        nav .nav-items-container .hero-links {
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="original">
+    <header>
+      <nav>
+        <div class="logo">
+          <a href="#home"><span>Magnma</span>Institute</a>
+        </div>
+        <div class="nav-items-container">
+          <div class="hero-links nav-links">
+            <a href="#home">Home</a><a href="#services">Services</a
+            ><a href="#about">About</a><a href="#college">Colleges</a>
+            <a href="#courses">Courses</a><a href="#blog">Blog</a
+            ><a href="#contact">Contact</a>
+          </div>
+          <div class="hero-btn">
+            <a href="#contact">Book Now <i class="fa fa-paper-plane"></i></a>
+          </div>
+          <button id="theme-toggle" aria-label="Switch Theme">
+            <i class="fa fa-paint-brush"></i>
+          </button>
+        </div>
+        <div class="hamburger-menu">
+          <div class="ham-bar bar-top"></div>
+          <div class="ham-bar bar-mid"></div>
+          <div class="ham-bar bar-bottom"></div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="hero-section" id="home">
+      <div class="hero-text">
+        <p class="intro-text">GUIDING YOUR FUTURE</p>
+        <h1>Your Trusted Partner in Education</h1>
+        <h3>
+          Do you have a dream? We will share it with you and make it real.
+        </h3>
+        <div class="hero-btn">
+          <a href="#services"
+            >Explore Services <i class="fa fa-arrow-down"></i
+          ></a>
+        </div>
+      </div>
+      <div class="hero-img">
+        <img src="about-banner.png" alt="Education illustration" />
+      </div>
+    </main>
+
+    <section id="services" class="light-bg">
+      <h1 class="section-heading">Our Services</h1>
+      <p class="section-intro">
+        Our team of experts provides professional assistance tailored to your
+        educational journey.
+      </p>
+      <div class="service-grid">
+        <div class="service-box">
+          <img src="research.png" alt="Research Icon" />
+          <h2>RESEARCH</h2>
+          <p>
+            We provide complete research and data on the best colleges
+            available.
+          </p>
+        </div>
+        <div class="service-box">
+          <img src="colleges.jpeg" alt="Admissions Icon" />
+          <h2>ADMISSION & SCHOLARSHIP</h2>
+          <p>
+            Application for worldwide colleges and scholarship applications.
+          </p>
+        </div>
+        <div class="service-box">
+          <img src="funding.png" alt="Funding Icon" />
+          <h2>EDUCATION FUNDING</h2>
+          <p>Guidance for education loans to make studying less of a burden.</p>
+        </div>
+        <div class="service-box">
+          <img src="coaching.png" alt="Coaching Icon" />
+          <h2>CAREER COACHING</h2>
+          <p>
+            Personalized strategies and unwavering support to help you reach
+            your career goals.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="about-container">
+        <div class="about-img">
+          <img src="about-banner.png" alt="Our mission" />
+        </div>
+        <div class="about-text">
+          <h1 class="section-heading" style="text-align: left">About Us</h1>
+          <p>
+            We are contemporary education consulting firm established in 2019
+            with a specialty in delivering educational services. The team
+            consists of knowledgeable educational consultants, researchers,
+            academic experts, service providers, and customer service staff. We
+            have achieved significant milestones in academic research at various
+            universities and have a strong track record of delivering
+            exceptional results.
+          </p>
+          <div class="hero-btn"><a href="#contact">Get In Touch</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="college" class="colleges-section light-bg">
+      <h1 class="section-heading">Our Partner Colleges</h1>
+      <p class="section-intro">
+        We have affiliations with a wide range of prestigious institutions
+        around the globe.
+      </p>
+      <div class="in-section-search-bar">
+        <input
+          type="text"
+          id="college-search"
+          class="search-input"
+          placeholder="🔍 Search for colleges..."
+        />
+      </div>
+      <div class="colleges-container" id="main-colleges-grid">
+        <!-- JavaScript dynamically builds the college cards here -->
+      </div>
+      <div id="no-colleges-found" class="no-results">
+        No colleges found matching your search.
+      </div>
+      <div class="view-more-container">
+        <a href="all-colleges.html" class="view-more-btn">View More Colleges</a>
+      </div>
+    </section>
+
+    <section id="courses" class="courses-section">
+      <h1 class="section-heading">Popular Courses</h1>
+      <p class="section-intro">
+        Explore a variety of courses tailored to your career aspirations.
+      </p>
+      <div class="in-section-search-bar">
+        <input
+          type="text"
+          id="course-search"
+          class="search-input"
+          placeholder="🔍 Search for courses..."
+        />
+      </div>
+      <div class="courses-grid" id="main-courses-grid">
+        <a href="course-template.html?course=mbbs" class="course-card"
+          ><img src="doctor.png" alt="MBBS" />
+          <h3>MBBS</h3>
+          <p>Medical Degree</p></a
+        >
+        <a href="course-template.html?course=btech" class="course-card"
+          ><img
+            src="https://placehold.co/60x60/F7FAFC/0A4D68?text=⚙️"
+            alt="B.Tech"
+          />
+          <h3>B.TECH</h3>
+          <p>Engineering Degree</p></a
+        >
+        <a href="course-template.html?course=mba" class="course-card"
+          ><img src="mba2.jpg" alt="MBA" />
+          <h3>MBA</h3>
+          <p>Business Management</p></a
+        >
+      </div>
+      <div id="no-courses-found" class="no-results">
+        No courses found matching your search.
+      </div>
+      <div class="view-more-container">
+        <a href="all-courses.html" class="view-more-btn">View More Courses</a>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-sec light-bg">
+      <h1 class="section-heading">Get In Touch</h1>
+      <p class="section-intro">
+        Have questions? Select an office to see its location, or book a free
+        session below.
+      </p>
+      <div class="contact-grid">
+        <div class="office-list">
+          <h3 class="form-title" style="text-align: left">Our Offices</h3>
+          <div class="office-grid">
+            <div
+              class="office-box active"
+              data-map-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3684.398935279261!2d88.3424185759685!3d22.5642449332207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277154575b64b%3A0x43f9d5012574972!2s88%2C%201%2C%20Dr%20Abani%20Dutta%20Rd%2C%20Salkia%2C%20Howrah%2C%20West%20Bengal%20711106!5e0!3m2!1sen!2sin!4v1676288675765!5m2!1sen!2sin"
+            >
+              <h4><i class="fa fa-map-marker"></i> Kolkata</h4>
+              <p>
+                <i class="fa fa-home"></i> 88/1, Dr Abani Dutta Rd, Babudanga,
+                Bandhaghat, Mali Panchghara, Howrah, West Bengal 711106
+              </p>
+              <p><i class="fa fa-phone"></i> +91 7384736917</p>
+            </div>
+            <div
+              class="office-box"
+              data-map-src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d457.3085369032905!2d87.33641751749151!3d23.51565356906591!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sA-11%20ISPAT%20PALLY%2C%20Bidhannagar!5e0!3m2!1sen!2sin!4v1752135809053!5m2!1sen!2sin"
+              >
+              <h4><i class="fa fa-map-marker"></i> Durgapur</h4>
+              <p><i class="fa fa-home"></i> A-11 ISPAT PALLY, Bidhannagar</p>
+              <p><i class="fa fa-phone"></i> +91 7384736917</p>
+            </div>
+            <div
+              class="office-box"
+              data-map-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14663.001541067042!2d87.04862592361133!3d23.25216874837705!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f7a5fbc33cea67%3A0x1b154af159734264!2sJunbedia%2C%20West%20Bengal!5e0!3m2!1sen!2sin!4v1752135577656!5m2!1sen!2sin"
+            >
+              <h4><i class="fa fa-map-marker"></i> Bankura</h4>
+              <p><i class="fa fa-home"></i> Junbedia Modh, Bankura Bodra</p>
+              <p><i class="fa fa-phone"></i> +91 7384736917</p>
+            </div>
+            <div
+              class="office-box"
+              data-map-src=https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3602.142613243592!2d81.86180807517285!3d25.466912977538264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399aca9dd92708eb%3A0x15c0842962ea9e4d!2s5A%2F3B%2C%20PC%20Banerjee%20Rd%2C%20The%20Adelphi%2C%20Allen%20Ganj%2C%20Prayagraj%2C%20Uttar%20Pradesh%20211002!5e0!3m2!1sen!2sin!4v1752135297236!5m2!1sen!2sin
+            >
+              <h4><i class="fa fa-map-marker"></i> Prayagraj</h4>
+              <p>
+                <i class="fa fa-home"></i> 5A/3B, PC Banerjee Rd, The Adelphi,
+                Allen Ganj, Prayagraj, Uttar Pradesh 211002
+              </p>
+              <p><i class="fa fa-phone"></i> +91 7384736917</p>
+            </div>
+          </div>
+        </div>
+        <div class="map-container">
+          <iframe
+            id="office-map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3684.398935279261!2d88.3424185759685!3d22.5642449332207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0277154575b64b%3A0x43f9d5012574972!2s88%2C%201%2C%20Dr%20Abani%20Dutta%20Rd%2C%20Salkia%2C%20Howrah%2C%20West%20Bengal%20711106!5e0!3m2!1sen!2sin!4v1676288675765!5m2!1sen!2sin"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          >
+          </iframe>
+        </div>
+      </div>
+      <div class="form-container" style="max-width: 800px; margin: 0 auto">
+        <div class="form">
+          <h3 class="form-title">Book a Free Counselling Session</h3>
+          <form action="https://api.web3forms.com/submit" method="POST">
+            <input
+              type="hidden"
+              name="access_key"
+              value="b5e631c3-432a-4145-8444-e512fd71a0bc"
+            />
+            <label for="name">Full Name</label
+            ><input type="text" id="name" name="name" required />
+            <label for="email">Email Address</label
+            ><input type="email" id="email" name="email" required />
+            <label for="number">Mobile Number</label
+            ><input type="tel" id="number" name="number" required />
+            <label for="session-date">Select a Date</label
+            ><input type="date" id="session-date" name="date" required />
+            <label for="session-time">Select a Time Slot</label>
+            <select id="session-time" name="time" required>
+              <option value="">-- Choose a time --</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
+              <option value="2:00 PM">2:00 PM</option>
+              <option value="4:00 PM">4:00 PM</option>
+              <option value="6:00 PM">6:00 PM</option>
+            </select>
+            <label for="message">Your Message (Optional)</label
+            ><textarea id="message" name="message" rows="4"></textarea>
+            <button type="submit" class="form-submit-btn">
+              Send Message <i class="fa fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="up-footer">
+        <div class="logo">
+          <a href="#home"><span>Magnma</span>Institute</a>
+        </div>
+      </div>
+      <div class="footer-social-links">
+        <a href="https://www.instagram.com/magnma_institute/" target="_blank"
+          ><i class="fa fa-instagram"></i
+        ></a>
+        <a href="https://wa.me/7384736917" target="_blank"
+          ><i class="fa fa-whatsapp"></i
+        ></a>
+        <a href="https://www.facebook.com/share/18Ar3puxfu/" target="_blank"
+          ><i class="fa fa-facebook"></i
+        ></a>
+      </div>
+      <hr />
+      <div class="foot-links">
+        <a href="#home">Home</a><a href="#services">Services</a
+        ><a href="#about">About</a><a href="#college">Colleges</a>
+        <a href="#courses">Courses</a><a href="#blog">Blog</a
+        ><a href="#contact">Contact</a>
+      </div>
+      <div class="bottom-footer">
+        <p>© Copyright 2024 MagnmaInstitute. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <div class="chatbot-widget">
+      <div class="chat-bubble" id="chat-bubble">
+        <img src="chatbot3.png" alt="Chat Icon" />
+      </div>
+      <div class="chat-window" id="chat-window">
+        <div class="chat-header">
+          <div class="chat-header-content">
+            <img
+              src="chatbot3.png"
+              alt="Bot Avatar"
+              class="chat-header-avatar"
+            />
+            <h3>MagnmaBot</h3>
+          </div>
+          <button class="chat-close" id="chat-close">×</button>
+        </div>
+        <div class="chat-body" id="chat-body"></div>
+        <div class="chat-input-area">
+          <input type="text" id="chat-input" placeholder="Ask a question..." />
+          <button id="chat-send" aria-label="Send Message">
+            <i class="fa fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+ <script src="college-data.js" defer></script>
+    <script src="course-details.js" defer></script>
+    <script src="index-loader.js" defer></script>
+    <script src="chatbot.js"></script>
+    
+  </body>
+</html>

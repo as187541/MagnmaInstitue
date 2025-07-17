@@ -1,0 +1,13 @@
+# Ignore the huge node_modules folder
+node_modules
+
+# Ignore git files
+.git
+
+# Ignore files related to Docker itself
+Dockerfile
+.dockerignore
+
+# Ignore package manager lock files
+package-lock.json
+pnpm-lock.yaml
