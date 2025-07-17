@@ -1024,11 +1024,12 @@ section.light-bg {
     opacity 0.5s ease-in-out;
   padding: 0 5%;
   opacity: 0;
-  background: linear-gradient(
-    175deg,
-    hsl(197, 71%, 25%),
-    hsl(197, 71%, 15%)
-  );
+  border-top: 1px solid var(--border-color);
+
+  /* --- NEW THEME-FRIENDLY BACKGROUND --- */
+  /* This uses a very light base color from your theme and overlays a subtle texture */
+  background-color: var(--light-bg);
+  background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23dee2e6" fill-opacity="0.15"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
 }
 
 /* Styles for when the form is visible */
@@ -1036,17 +1037,17 @@ section.light-bg {
   max-height: 1500px; /* A large value to allow the form to expand */
   padding: 100px 5%;
   opacity: 1;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .form-wrapper {
   max-width: 700px;
   margin: 0 auto;
-  background-color: var(--white);
+  background-color: #fcfcfc;
   padding: 40px 50px;
   border-radius: var(--radius-8);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-2); /* A slightly more prominent shadow */
   text-align: center;
+  border: 1px solid var(--border-color);
 }
 
 .form-wrapper .form-title {
