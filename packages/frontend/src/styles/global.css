@@ -110,6 +110,11 @@ nav {
   background-color: var(--nav-bg);
   z-index: 1000;
   border-bottom: 1px solid var(--border-color);
+  transition: transform 0.3s ease;
+}
+
+header.nav-hidden nav {
+  transform: translateY(-100%);
 }
 
 .logo a {
@@ -1250,6 +1255,9 @@ section.light-bg {
   }
   nav {
     height: 70px;
+  }
+  header.nav-hidden nav {
+    transform: translateY(-100%);
   }
   .hero-section,
   .about-container {

@@ -62,10 +62,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const path = req.url.replace("/api/courses", "").replace("/api/courses", "");
+    // Vercel rewrites change req.url, so read original path from query param
+    const originalPath = req.query.__path || "";
+    const path = "/" + originalPath;
 
     // GET /api/courses - List all
-    if (req.method === "GET" && (path === "" || path === "/" || path.startsWith("?"))) {
+    if (req.method === "GET" && (path === "/" || path.startsWith("/?"))) {
       const { search } = req.query;
       let query = supabase.from("courses").select("*");
       if (search) query = query.ilike("name", `%${search}%`);

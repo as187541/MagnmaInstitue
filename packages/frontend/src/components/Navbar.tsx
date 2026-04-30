@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../hooks/useTheme";
 import { useAuth } from "../contexts/AuthContext";
@@ -16,10 +16,27 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [navHidden, setNavHidden] = useState(false);
   const { toggleTheme } = useTheme();
   const { user, profile, signOut, isStaff } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      // Hide nav when scrolling down past 100px, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setNavHidden(true);
+      } else {
+        setNavHidden(false);
+      }
+      lastScrollY = currentScrollY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleNavClick = (to: string, hash?: string) => {
     setMenuOpen(false);
@@ -35,7 +52,7 @@ export default function Navbar() {
   };
 
   return (
-    <header>
+    <header className={navHidden ? "nav-hidden" : ""}>
       <nav>
         <div className="logo">
           <Link to="/">

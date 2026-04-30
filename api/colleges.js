@@ -59,10 +59,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const path = req.url.replace("/api/colleges", "").replace("/api/colleges", "");
+    // Vercel rewrites change req.url, so read original path from query param
+    const originalPath = req.query.__path || "";
+    const path = "/" + originalPath;
 
     // GET /api/colleges - List all
-    if (req.method === "GET" && (path === "" || path === "/" || path.startsWith("?"))) {
+    if (req.method === "GET" && (path === "/" || path.startsWith("/?"))) {
       const { search, featured, page, limit } = req.query;
       const pageNum = parseInt(page || "1");
       const limitNum = parseInt(limit || "50");
