@@ -109,7 +109,13 @@ export default function HomePage() {
         <div className="service-grid">
           {SERVICES.map((service) => (
             <div key={service.id} className="service-box">
-              <img src={`/${service.image}`} alt={service.title} />
+              <img
+                src={`/${service.image}`}
+                alt={service.title}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "https://placehold.co/80x80/0a4d68/FFF?text=Service";
+                }}
+              />
               <h2>{service.title}</h2>
               <p>{service.description}</p>
             </div>

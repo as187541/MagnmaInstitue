@@ -122,25 +122,25 @@ export const SERVICES: Service[] = [
     id: "research",
     title: "RESEARCH",
     description: "We provide complete research and data on the best colleges available.",
-    image: "assets/images/services/research.png",
+    image: "assets/images/services/doctor.png",
   },
   {
     id: "admission",
     title: "ADMISSION & SCHOLARSHIP",
     description: "Application for worldwide colleges and scholarship applications.",
-    image: "assets/images/services/colleges.jpeg",
+    image: "assets/images/services/doctor.png",
   },
   {
     id: "funding",
     title: "EDUCATION FUNDING",
     description: "Guidance for education loans to make studying less of a burden.",
-    image: "assets/images/services/funding.png",
+    image: "assets/images/services/doctor.png",
   },
   {
     id: "coaching",
     title: "CAREER COACHING",
     description: "Personalized strategies and unwavering support to help you reach your career goals.",
-    image: "assets/images/services/coaching.png",
+    image: "assets/images/services/doctor.png",
   },
 ];
 
