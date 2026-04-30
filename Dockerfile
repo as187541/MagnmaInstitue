@@ -1,15 +1,45 @@
-# Step 1: Start with a pre-built "gallery wall" - an official Nginx web server.
-# 'nginx:stable-alpine' is a small and reliable version.
+# ============================================================
+# Dockerfile for Magnma Institute - Frontend (React + Vite)
+# ============================================================
+# Build context: repository root (monorepo)
+# Usage:
+#   docker build -t magnma-frontend .
+#   docker run -p 80:80 magnma-frontend
+# ============================================================
+
+# --- Stage 1: Build the React app ---
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy root workspace configuration
+COPY package.json tsconfig.json ./
+
+# Copy workspace package manifests (for npm install)
+COPY packages/shared/package.json packages/shared/
+COPY packages/frontend/package.json packages/frontend/
+
+# Install all dependencies (respects workspaces)
+RUN npm install
+
+# Copy source code
+COPY packages/shared/ packages/shared/
+COPY packages/frontend/ packages/frontend/
+
+# Build the frontend (outputs to packages/frontend/dist)
+RUN npm run build -w packages/frontend
+
+# --- Stage 2: Serve with Nginx ---
 FROM nginx:stable-alpine
 
-# Step 2: Take all our files from our project...
-# The first '.' means "everything in my current project folder".
-# The second part is the destination: where Nginx expects to find website files inside the container.
-COPY . /usr/share/nginx/html
+# Copy built static assets
+COPY --from=builder /app/packages/frontend/dist /usr/share/nginx/html
 
-# Step 3: Tell Docker that the container will be listening for visitors on port 80.
-# Port 80 is the standard port for HTTP web traffic.
+# Copy nginx config for SPA routing (React Router support)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose HTTP port
 EXPOSE 80
 
-# That's it! The base Nginx image already knows how to start itself.
-# We don't need a CMD instruction.
+# Start Nginx in foreground
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,13 +1,47 @@
-# Ignore the huge node_modules folder
+# --- Dependencies ---
 node_modules
+packages/*/node_modules
 
-# Ignore git files
+# --- Git ---
 .git
+.gitignore
 
-# Ignore files related to Docker itself
+# --- Environment / Secrets ---
+.env
+.env.*
+packages/*/.env
+
+# --- Build outputs ---
+dist
+packages/*/dist
+build
+packages/*/build
+
+# --- Logs ---
+*.log
+npm-debug.log*
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE ---
+.vscode
+.idea
+
+# --- Docker itself ---
 Dockerfile
+Dockerfile.api
+docker-compose.yml
 .dockerignore
 
-# Ignore package manager lock files
-package-lock.json
-pnpm-lock.yaml
+# --- Lock files (optional - include if you want reproducible builds) ---
+# package-lock.json
+# pnpm-lock.yaml
+
+# --- Misc ---
+*.md
+!README.md
+netlify
+netlify.toml
+DEPLOY.md

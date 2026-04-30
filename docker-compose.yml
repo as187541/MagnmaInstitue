@@ -1,0 +1,79 @@
+# ============================================================
+# Docker Compose for Magnma Institute Microservices
+# ============================================================
+
+version: "3.8"
+
+services:
+  # --- Frontend (React + Vite) ---
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api-colleges
+      - api-courses
+      - api-contact
+    networks:
+      - magnma-network
+
+  # --- Colleges Microservice ---
+  api-colleges:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+      args:
+        SERVICE: api-colleges
+        PORT: 3001
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+      - CORS_ORIGIN=http://localhost:80
+    networks:
+      - magnma-network
+
+  # --- Courses Microservice ---
+  api-courses:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+      args:
+        SERVICE: api-courses
+        PORT: 3002
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+      - CORS_ORIGIN=http://localhost:80
+    networks:
+      - magnma-network
+
+  # --- Contact Microservice ---
+  api-contact:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+      args:
+        SERVICE: api-contact
+        PORT: 3003
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+      - WEB3FORMS_ACCESS_KEY=${WEB3FORMS_ACCESS_KEY}
+      - CORS_ORIGIN=http://localhost:80
+    networks:
+      - magnma-network
+
+networks:
+  magnma-network:
+    driver: bridge

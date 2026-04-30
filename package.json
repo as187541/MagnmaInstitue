@@ -1,23 +1,31 @@
 {
-  "name": "html-css",
-  "version": "1.0.0",
-  "description": "A template for HTML and CSS",
-  "main": "index.html",
-  "scripts": {
-    "start": "serve",
-    "dev": "vite"
-  },
-  "keywords": [
-    "html",
-    "css"
+  "name": "magnma-institute",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Magnma Institute - Microservices Architecture with Supabase",
+  "workspaces": [
+    "packages/*"
   ],
-  "author": "Ives van Hoorne",
-  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:api-colleges\" \"npm run dev:api-courses\" \"npm run dev:api-contact\"",
+    "dev:frontend": "npm run dev -w packages/frontend",
+    "dev:api-colleges": "npx -w packages/api-colleges tsx src/index.ts",
+    "dev:api-courses": "npx -w packages/api-courses tsx src/index.ts",
+    "dev:api-contact": "npx -w packages/api-contact tsx src/index.ts",
+    "build": "npm run build -w packages/frontend",
+    "start": "npm run start -w packages/frontend",
+    "supabase:seed": "npx ts-node supabase/seed.ts",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up"
+  },
   "devDependencies": {
-    "serve": "^14.2.4"
+    "concurrently": "^8.2.2",
+    "dotenv": "^17.4.2",
+    "dotenv-cli": "^11.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
   },
   "dependencies": {
-    "font-awesome": "^4.7.0",
-    "lodash": "^4.17.21"
+    "@supabase/supabase-js": "^2.105.1"
   }
 }
