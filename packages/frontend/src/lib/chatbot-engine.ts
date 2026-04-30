@@ -368,6 +368,26 @@ async function fetchBlogPosts(): Promise<any[]> {
   }
 }
 
+// --- Fetch admin course-college rankings from Supabase ---
+async function fetchCourseRankings(courseId: string): Promise<Map<string, number>> {
+  try {
+    const { data, error } = await supabase
+      .from("course_college_rankings")
+      .select("college_id, display_order")
+      .eq("course_id", courseId)
+      .order("display_order", { ascending: true });
+    if (error) throw error;
+
+    const map = new Map<string, number>();
+    (data || []).forEach((r: any) => {
+      map.set(r.college_id, r.display_order);
+    });
+    return map;
+  } catch {
+    return new Map();
+  }
+}
+
 // --- Recommendation Engine ---
 async function getRecommendations(
   course: string | null,
@@ -385,7 +405,16 @@ async function getRecommendations(
     return matchCourse && matchLocation;
   });
 
-  if (ranking) {
+  // Sort by admin-defined course-college ranking when a course is specified
+  if (course) {
+    const rankMap = await fetchCourseRankings(course);
+    filtered = filtered.sort((a, b) => {
+      const rankA = rankMap.get(a.id) ?? (a.featured ? 0 : 9999);
+      const rankB = rankMap.get(b.id) ?? (b.featured ? 0 : 9999);
+      if (rankA !== rankB) return rankA - rankB;
+      return a.name.localeCompare(b.name);
+    });
+  } else if (ranking) {
     filtered = filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
   }
 
@@ -724,14 +753,38 @@ export async function processMessage(
     const response: BotResponse = {
       text: "Great! I'd love to help you find the perfect college. <strong>Which course are you interested in?</strong>",
       quickActions: [
-        { label: "MBBS", action: "recommend", value: "best mbbs colleges" },
-        { label: "B.Tech", action: "recommend", value: "best btech colleges" },
-        { label: "MBA", action: "recommend", value: "best mba colleges" },
-        { label: "BDS", action: "recommend", value: "best bds colleges" },
-        { label: "M.Tech", action: "recommend", value: "best mtech colleges" },
-        { label: "Law", action: "recommend", value: "best law colleges" },
-        { label: "Pharmacy", action: "recommend", value: "best pharmacy colleges" },
-        { label: "Nursing", action: "recommend", value: "best nursing colleges" },
+        { label: "MBBS", action: "intent", value: "ask_location mbbs" },
+        { label: "B.Tech", action: "intent", value: "ask_location btech" },
+        { label: "MBA", action: "intent", value: "ask_location mba" },
+        { label: "BDS", action: "intent", value: "ask_location bds" },
+        { label: "M.Tech", action: "intent", value: "ask_location mtech" },
+        { label: "Law", action: "intent", value: "ask_location law" },
+        { label: "Pharmacy", action: "intent", value: "ask_location pharmacy" },
+        { label: "Nursing", action: "intent", value: "ask_location nursing" },
+      ],
+    };
+    return { response, updatedContext };
+  }
+
+  // Handle ask_location special intent (e.g., "ask_location mbbs")
+  const locationMatch = trimmedInput.match(/^ask_location\s+(\w+)$/);
+  if (locationMatch) {
+    const course = locationMatch[1];
+    const updatedContext: ConversationContext = {
+      ...context,
+      lastIntent: "ask_location",
+      lastCourse: course,
+    };
+    const response: BotResponse = {
+      text: `Thanks! You're interested in <strong>${course.toUpperCase()}</strong>. <strong>Which location do you prefer?</strong> I can show you the best-ranked colleges nearby.`,
+      quickActions: [
+        { label: "Kolkata", action: "recommend", value: `best ${course} colleges in kolkata` },
+        { label: "Durgapur", action: "recommend", value: `best ${course} colleges in durgapur` },
+        { label: "Bankura", action: "recommend", value: `best ${course} colleges in bankura` },
+        { label: "Bolpur", action: "recommend", value: `best ${course} colleges in bolpur` },
+        { label: "Haldia", action: "recommend", value: `best ${course} colleges in haldia` },
+        { label: "Prayagraj", action: "recommend", value: `best ${course} colleges in prayagraj` },
+        { label: "Any Location", action: "recommend", value: `best ${course} colleges` },
       ],
     };
     return { response, updatedContext };
@@ -762,14 +815,14 @@ export async function processMessage(
       response = {
         text: "Great! I'd love to help you find the perfect college. <strong>Which course are you interested in?</strong>",
         quickActions: [
-          { label: "MBBS", action: "recommend", value: "best mbbs colleges" },
-          { label: "B.Tech", action: "recommend", value: "best btech colleges" },
-          { label: "MBA", action: "recommend", value: "best mba colleges" },
-          { label: "BDS", action: "recommend", value: "best bds colleges" },
-          { label: "M.Tech", action: "recommend", value: "best mtech colleges" },
-          { label: "Law", action: "recommend", value: "best law colleges" },
-          { label: "Pharmacy", action: "recommend", value: "best pharmacy colleges" },
-          { label: "Nursing", action: "recommend", value: "best nursing colleges" },
+          { label: "MBBS", action: "intent", value: "ask_location mbbs" },
+          { label: "B.Tech", action: "intent", value: "ask_location btech" },
+          { label: "MBA", action: "intent", value: "ask_location mba" },
+          { label: "BDS", action: "intent", value: "ask_location bds" },
+          { label: "M.Tech", action: "intent", value: "ask_location mtech" },
+          { label: "Law", action: "intent", value: "ask_location law" },
+          { label: "Pharmacy", action: "intent", value: "ask_location pharmacy" },
+          { label: "Nursing", action: "intent", value: "ask_location nursing" },
         ],
       };
       break;
@@ -808,7 +861,7 @@ export async function processMessage(
         response = {
           text: `<strong>${course.name}</strong><br><br>${course.description}<br><br>Would you like to see colleges offering this course?`,
           quickActions: [
-            { label: "Find Colleges", action: "recommend", value: `best ${course.id} colleges` },
+            { label: "Find Colleges", action: "intent", value: `ask_location ${course.id}` },
             { label: "View All Courses", action: "navigate", value: "/courses" },
             { label: "Admission Process", action: "intent", value: "admission" },
           ],
@@ -817,10 +870,10 @@ export async function processMessage(
         response = {
           text: "We offer a wide range of courses including MBBS, B.Tech, MBA, BDS, M.Tech, GNM, Law, and Pharmacy. Which one interests you?",
           quickActions: [
-            { label: "MBBS", action: "intent", value: "course mbbs" },
-            { label: "B.Tech", action: "intent", value: "course btech" },
-            { label: "MBA", action: "intent", value: "course mba" },
-            { label: "BDS", action: "intent", value: "course bds" },
+            { label: "MBBS", action: "intent", value: "ask_location mbbs" },
+            { label: "B.Tech", action: "intent", value: "ask_location btech" },
+            { label: "MBA", action: "intent", value: "ask_location mba" },
+            { label: "BDS", action: "intent", value: "ask_location bds" },
             { label: "View All", action: "navigate", value: "/courses" },
           ],
         };
@@ -901,7 +954,7 @@ export async function processMessage(
           response = {
             text: `<strong>${course.name}</strong><br><br>${course.description}<br><br>Would you like to see colleges offering this course?`,
             quickActions: [
-              { label: "Find Colleges", action: "recommend", value: course.id },
+              { label: "Find Colleges", action: "intent", value: `ask_location ${course.id}` },
               { label: "View All Courses", action: "navigate", value: "/courses" },
             ],
           };
