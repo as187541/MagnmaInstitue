@@ -53,11 +53,31 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Mobile Auth Buttons - inside hamburger menu */}
+            <div className="mobile-auth">
+              {user ? (
+                <>
+                  {isStaff && (
+                    <Link to="/admin" onClick={() => setMenuOpen(false)}>
+                      <i className="fa fa-dashboard"></i> Dashboard
+                    </Link>
+                  )}
+                  <button onClick={handleSignOut} className="mobile-signout-btn">
+                    <i className="fa fa-sign-out"></i> Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link to="/login" onClick={() => setMenuOpen(false)} className="mobile-login-btn">
+                  <i className="fa fa-sign-in"></i> Login
+                </Link>
+              )}
+            </div>
           </div>
 
-          {/* Auth Buttons */}
+          {/* Desktop Auth Buttons */}
           {user ? (
-            <div className="user-menu-container">
+            <div className="user-menu-container desktop-only">
               <button
                 className="user-menu-toggle"
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -80,7 +100,7 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="hero-btn">
+            <div className="hero-btn desktop-only">
               <Link to="/login">
                 <i className="fa fa-sign-in"></i> Login
               </Link>
