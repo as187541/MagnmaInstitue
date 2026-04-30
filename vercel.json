@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run build -w packages/frontend",
+  "outputDirectory": "packages/frontend/dist",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "framework": null
+}
