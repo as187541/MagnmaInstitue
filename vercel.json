@@ -7,6 +7,7 @@
 		{ "source": "/api/colleges/:path*", "destination": "/api/colleges.js?__path=:path*" },
 		{ "source": "/api/courses/:path*", "destination": "/api/courses.js?__path=:path*" },
 		{ "source": "/api/contact", "destination": "/api/contact.js" },
+		{ "source": "/api/users", "destination": "/api/users.js" },
 		{ "source": "/((?!api|assets|.*\\.).*)", "destination": "/index.html" }
 	],
 	"headers": [

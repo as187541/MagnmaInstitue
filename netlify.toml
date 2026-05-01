@@ -26,6 +26,11 @@
   to = "/.netlify/functions/contact"
   status = 200
 
+[[redirects]]
+  from = "/api/users"
+  to = "/.netlify/functions/users"
+  status = 200
+
 # --- SPA Redirects (React Router support) ---
 [[redirects]]
   from = "/*"

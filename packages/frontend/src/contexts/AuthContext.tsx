@@ -17,6 +17,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  deleteUser: (userId: string) => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -163,6 +164,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSession(null);
   }
 
+  async function deleteUser(userId: string) {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        return { error: new Error("Not authenticated") };
+      }
+
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        return { error: new Error(result.error || "Failed to delete user") };
+      }
+      return { error: null };
+    } catch (err: any) {
+      return { error: err };
+    }
+  }
+
   const isAdmin = profile?.role === "admin";
   const isStaff = profile?.role === "staff" || profile?.role === "admin";
 
@@ -179,6 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signUp,
         signOut,
         refreshProfile,
+        deleteUser,
       }}
     >
       {children}

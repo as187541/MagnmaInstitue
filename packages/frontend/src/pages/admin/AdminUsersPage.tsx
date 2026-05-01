@@ -15,11 +15,12 @@ interface UserProfile {
 }
 
 export default function AdminUsersPage() {
-  const { isAdmin, refreshProfile } = useAuth();
+  const { isAdmin, refreshProfile, deleteUser } = useAuth();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAdmin) fetchUsers();
@@ -61,6 +62,23 @@ export default function AdminUsersPage() {
       alert("Failed to update role. Make sure you are an admin.");
     } finally {
       setUpdatingId(null);
+    }
+  }
+
+  async function handleDelete(userId: string, email: string) {
+    if (!confirm(`Are you sure you want to permanently delete ${email}? This cannot be undone.`)) {
+      return;
+    }
+    setDeletingId(userId);
+    try {
+      const { error } = await deleteUser(userId);
+      if (error) throw error;
+      setUsers((prev) => prev.filter((u) => u.id !== userId));
+    } catch (error: any) {
+      console.error("Error deleting user:", error);
+      alert(error.message || "Failed to delete user.");
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -143,12 +161,24 @@ export default function AdminUsersPage() {
                       className="role-select"
                       value={user.role}
                       onChange={(e) => updateRole(user.id, e.target.value)}
-                      disabled={updatingId === user.id}
+                      disabled={updatingId === user.id || deletingId === user.id}
                     >
                       <option value="student">Student</option>
                       <option value="staff">Staff</option>
                       <option value="admin">Admin</option>
                     </select>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(user.id, user.email)}
+                      disabled={deletingId === user.id || updatingId === user.id}
+                      title="Delete user permanently"
+                    >
+                      {deletingId === user.id ? (
+                        <i className="fa fa-spinner fa-spin"></i>
+                      ) : (
+                        <i className="fa fa-trash"></i>
+                      )}
+                    </button>
                   </td>
                 </tr>
               ))}
