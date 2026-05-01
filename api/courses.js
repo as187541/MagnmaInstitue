@@ -6,6 +6,8 @@ const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || "";
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 function normalizeImagePath(path) {
+  if (!path) return path;
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
   const normalized = path
     .replace(/^collegeImages\//, "assets/images/colleges/")
     .replace(/^assests\/images\/collegeimages\//, "assets/images/colleges/");
