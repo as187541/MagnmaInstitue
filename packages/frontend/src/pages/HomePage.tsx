@@ -195,7 +195,7 @@ export default function HomePage() {
           />
         </div>
         <div className="courses-grid" id="main-courses-grid">
-          {filteredCourses.slice(0, 6).map((course: any) => (
+          {filteredCourses.slice(0, 8).map((course: any) => (
             <Link
               key={course.id}
               to={`/course/${course.id}`}
