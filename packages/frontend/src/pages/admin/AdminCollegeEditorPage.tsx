@@ -110,7 +110,21 @@ export default function AdminCollegeEditorPage() {
         throw new Error("College name is required");
       }
 
-      const collegeId = isEditing ? form.id : generateId(form.name);
+      let collegeId = isEditing ? form.id : generateId(form.name);
+
+      // If creating new, ensure ID is unique
+      if (!isEditing) {
+        const { data: existing } = await supabase
+          .from("colleges")
+          .select("id")
+          .eq("id", collegeId)
+          .maybeSingle();
+
+        if (existing) {
+          const randomSuffix = Math.random().toString(36).slice(2, 6);
+          collegeId = `${collegeId}-${randomSuffix}`;
+        }
+      }
 
       const payload = {
         id: collegeId,

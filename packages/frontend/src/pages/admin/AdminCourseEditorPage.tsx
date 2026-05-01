@@ -82,7 +82,21 @@ export default function AdminCourseEditorPage() {
         throw new Error("Course name is required");
       }
 
-      const courseId = isEditing ? form.id : generateId(form.name);
+      let courseId = isEditing ? form.id : generateId(form.name);
+
+      // If creating new, ensure ID is unique
+      if (!isEditing) {
+        const { data: existing } = await supabase
+          .from("courses")
+          .select("id")
+          .eq("id", courseId)
+          .maybeSingle();
+
+        if (existing) {
+          const randomSuffix = Math.random().toString(36).slice(2, 6);
+          courseId = `${courseId}-${randomSuffix}`;
+        }
+      }
 
       const payload = {
         id: courseId,
