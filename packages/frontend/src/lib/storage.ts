@@ -1,0 +1,51 @@
+// ============================================================
+// Supabase Storage Helpers
+// ============================================================
+
+import { supabase } from "./supabase";
+
+const BUCKET_NAME = "magnma-images";
+
+/**
+ * Upload a file to Supabase Storage and return its public URL.
+ */
+export async function uploadImage(
+  file: File,
+  path: string
+): Promise<{ url: string; error: Error | null }> {
+  const fileExt = file.name.split(".").pop() || "jpg";
+  const fullPath = `${path}.${fileExt}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from(BUCKET_NAME)
+    .upload(fullPath, file, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+
+  if (uploadError) {
+    return { url: "", error: new Error(uploadError.message) };
+  }
+
+  const { data } = supabase.storage.from(BUCKET_NAME).getPublicUrl(fullPath);
+  return { url: data.publicUrl, error: null };
+}
+
+/**
+ * Upload multiple files and return their public URLs.
+ */
+export async function uploadMultipleImages(
+  files: File[],
+  basePath: string
+): Promise<{ urls: string[]; error: Error | null }> {
+  const urls: string[] = [];
+  for (const file of files) {
+    const timestamp = Date.now();
+    const { url, error } = await uploadImage(file, `${basePath}/${timestamp}`);
+    if (error) {
+      return { urls, error };
+    }
+    urls.push(url);
+  }
+  return { urls, error: null };
+}

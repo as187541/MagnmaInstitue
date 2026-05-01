@@ -5,6 +5,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import { uploadImage } from "../../lib/storage";
+import ImageUpload from "../../components/ImageUpload";
+import MultiImageUpload from "../../components/MultiImageUpload";
 
 interface CollegeFormData {
   id: string;
@@ -175,15 +178,13 @@ export default function AdminCollegeEditorPage() {
           />
         </div>
 
-        <div className="form-group">
-          <label>Logo Image URL</label>
-          <input
-            type="text"
-            value={form.logo_image}
-            onChange={(e) => setForm({ ...form, logo_image: e.target.value })}
-            placeholder="https://example.com/logo.png"
-          />
-        </div>
+        <ImageUpload
+          label="Logo Image"
+          value={form.logo_image}
+          onChange={(url) => setForm({ ...form, logo_image: url })}
+          folder="colleges/logos"
+          uploadFn={uploadImage}
+        />
 
         <div className="form-row">
           <div className="form-group">
@@ -281,15 +282,13 @@ export default function AdminCollegeEditorPage() {
           />
         </div>
 
-        <div className="form-group">
-          <label>Gallery Images (one URL per line)</label>
-          <textarea
-            value={form.images}
-            onChange={(e) => setForm({ ...form, images: e.target.value })}
-            placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-            rows={4}
-          />
-        </div>
+        <MultiImageUpload
+          label="Gallery Images"
+          values={form.images.split("\n").filter(Boolean)}
+          onChange={(urls) => setForm({ ...form, images: urls.join("\n") })}
+          folder="colleges/gallery"
+          uploadFn={uploadImage}
+        />
 
         <div className="form-group checkbox-group">
           <label className="checkbox-label">

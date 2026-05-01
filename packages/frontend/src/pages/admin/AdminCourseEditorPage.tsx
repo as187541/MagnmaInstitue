@@ -5,6 +5,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import { uploadImage } from "../../lib/storage";
+import ImageUpload from "../../components/ImageUpload";
 
 interface CourseFormData {
   id: string;
@@ -150,15 +152,13 @@ export default function AdminCourseEditorPage() {
           />
         </div>
 
-        <div className="form-group">
-          <label>Course Image URL</label>
-          <input
-            type="text"
-            value={form.image}
-            onChange={(e) => setForm({ ...form, image: e.target.value })}
-            placeholder="https://example.com/course-image.jpg"
-          />
-        </div>
+        <ImageUpload
+          label="Course Image"
+          value={form.image}
+          onChange={(url) => setForm({ ...form, image: url })}
+          folder="courses"
+          uploadFn={uploadImage}
+        />
 
         <div className="form-group">
           <label>Specializations (one per line)</label>

@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
+import { uploadImage } from "../../lib/storage";
+import ImageUpload from "../../components/ImageUpload";
 
 interface BlogFormData {
   title: string;
@@ -192,21 +194,13 @@ export default function AdminBlogEditorPage() {
             </span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="featured_image">Featured Image URL</label>
-            <input
-              type="url"
-              id="featured_image"
-              value={form.featured_image}
-              onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  featured_image: e.target.value,
-                }))
-              }
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
+          <ImageUpload
+            label="Featured Image"
+            value={form.featured_image}
+            onChange={(url) => setForm((prev) => ({ ...prev, featured_image: url }))}
+            folder="blog"
+            uploadFn={uploadImage}
+          />
 
           <div className="form-group">
             <label htmlFor="excerpt">Excerpt</label>

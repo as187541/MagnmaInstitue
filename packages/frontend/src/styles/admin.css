@@ -1674,3 +1674,113 @@
     justify-content: center;
   }
 }
+
+/* ============================================================ */
+/* Image Upload Styles                                        */
+/* ============================================================ */
+
+.image-upload-preview {
+  margin-bottom: 12px;
+}
+
+.image-upload-preview img {
+  max-width: 200px;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: var(--radius-8);
+  border: 1px solid var(--border-color);
+}
+
+.image-upload-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.image-upload-row .image-url-input {
+  flex: 1;
+}
+
+.btn-upload {
+  padding: 10px 16px;
+  background: var(--primary-accent);
+  color: var(--white);
+  border: 2px solid var(--primary-accent);
+  border-radius: var(--radius-8);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-upload:hover:not(:disabled) {
+  background: transparent;
+  color: var(--primary-accent);
+}
+
+.btn-upload:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Multi-image upload */
+.multi-image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.multi-image-thumb {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: var(--radius-8);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.multi-image-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  background: rgba(197, 48, 48, 0.9);
+  color: var(--white);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  transition: background 0.2s;
+}
+
+.remove-image-btn:hover {
+  background: #c53030;
+}
+
+.multi-image-upload-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.multi-image-upload-row textarea {
+  flex: 1;
+}
+
+.multi-image-upload-row .btn-upload {
+  align-self: flex-start;
+}
