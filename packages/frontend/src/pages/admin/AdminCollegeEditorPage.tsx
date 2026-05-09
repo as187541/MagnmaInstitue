@@ -8,6 +8,7 @@ import { supabase } from "../../lib/supabase";
 import { uploadImage } from "../../lib/storage";
 import ImageUpload from "../../components/ImageUpload";
 import MultiImageUpload from "../../components/MultiImageUpload";
+import SEO from "../../components/SEO";
 
 interface CollegeFormData {
   id: string;
@@ -171,7 +172,9 @@ export default function AdminCollegeEditorPage() {
   }
 
   return (
-    <div className="admin-page">
+    <>
+      <SEO title={isEditing ? "Edit College" : "Create College"} noindex />
+      <div className="admin-page">
       <div className="admin-page-header">
         <h1>{isEditing ? "Edit College" : "Add New College"}</h1>
       </div>
@@ -337,5 +340,6 @@ export default function AdminCollegeEditorPage() {
         </div>
       </form>
     </div>
+  </>
   );
 }

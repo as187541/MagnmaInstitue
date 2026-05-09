@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import SEO from "../components/SEO";
 
 interface BlogPost {
   id: string;
@@ -51,7 +52,14 @@ export default function BlogPage() {
   );
 
   return (
-    <div className="blog-page">
+    <>
+      <SEO
+        title="Blog"
+        description="Stay updated with the latest news, tips, and guides from the world of education. Expert insights on college admissions, courses, and career guidance."
+        keywords="education blog, college admission tips, career guidance, study tips, education news"
+        canonical="/blog"
+      />
+      <div className="blog-page">
       <section className="blog-hero">
         <h1>Education Insights &amp; News</h1>
         <p>
@@ -123,5 +131,6 @@ export default function BlogPage() {
         )}
       </section>
     </div>
+  </>
   );
 }

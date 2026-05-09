@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import SEO from "../../components/SEO";
 
 interface BlogPost {
   id: string;
@@ -85,7 +86,9 @@ export default function AdminBlogPage() {
   }
 
   return (
-    <div className="admin-page">
+    <>
+      <SEO title="Manage Blog" noindex />
+      <div className="admin-page">
       <div className="admin-page-header">
         <h1>Blog Posts</h1>
         <Link to="/admin/blog/new" className="btn-primary">
@@ -196,5 +199,6 @@ export default function AdminBlogPage() {
         </div>
       )}
     </div>
+  </>
   );
 }

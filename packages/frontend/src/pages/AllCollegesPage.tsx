@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getColleges } from "../api/client";
 import { useCompare } from "../contexts/CompareContext";
+import SEO from "../components/SEO";
 
 export default function AllCollegesPage() {
   const [colleges, setColleges] = useState<any[]>([]);
@@ -22,7 +23,14 @@ export default function AllCollegesPage() {
   );
 
   return (
-    <main className="main-container all-colleges-page">
+    <>
+      <SEO
+        title="Partner Colleges"
+        description="Explore our partner colleges including top medical and engineering institutions across India. Find detailed information about admissions, fees, and courses."
+        keywords="medical colleges, engineering colleges, MBBS, B.Tech, admission guidance, India colleges"
+        canonical="/colleges"
+      />
+      <main className="main-container all-colleges-page">
       <h1 className="page-heading">Our Partner Colleges</h1>
 
       <div className="in-section-search-bar">
@@ -93,6 +101,7 @@ export default function AllCollegesPage() {
       {/* Floating compare bar */}
       <CompareBar colleges={colleges} />
     </main>
+  </>
   );
 }
 

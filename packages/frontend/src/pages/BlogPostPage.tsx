@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { sanitizeHtml } from "../lib/sanitize";
+import SEO from "../components/SEO";
 
 interface BlogPost {
   id: string;
@@ -78,7 +79,15 @@ export default function BlogPostPage() {
   }
 
   return (
-    <article className="blog-post-page">
+    <>
+      <SEO
+        title={post.title}
+        description={post.excerpt?.substring(0, 160)}
+        ogImage={post.featured_image}
+        ogType="article"
+        canonical={`/blog/${post.slug}`}
+      />
+      <article className="blog-post-page">
       {/* Breadcrumb */}
       <nav className="breadcrumb">
         <Link to="/">Home</Link>
@@ -183,5 +192,6 @@ export default function BlogPostPage() {
         </Link>
       </div>
     </article>
+  </>
   );
 }

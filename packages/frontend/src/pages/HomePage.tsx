@@ -4,6 +4,7 @@ import { getColleges, getCourses } from "../api/client";
 import { SERVICES, OFFICE_LOCATIONS } from "@magnma/shared";
 import { supabase } from "../lib/supabase";
 import ContactForm from "../components/ContactForm";
+import SEO from "../components/SEO";
 
 interface BlogPost {
   id: string;
@@ -83,6 +84,11 @@ export default function HomePage() {
 
   return (
     <>
+      <SEO
+        title="Home"
+        description="Magnma Institute is your trusted partner in education. We provide expert guidance for college admissions, scholarships, and career coaching across India and abroad."
+        canonical="/"
+      />
       {/* Hero Section */}
       <section className="hero-section" id="home">
         <div className="hero-text">

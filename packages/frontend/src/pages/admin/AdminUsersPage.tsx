@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
+import SEO from "../../components/SEO";
 
 interface UserProfile {
   id: string;
@@ -101,7 +102,9 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="admin-page">
+    <>
+      <SEO title="Manage Users" noindex />
+      <div className="admin-page">
       <div className="admin-page-header">
         <h1>Users</h1>
         <span className="admin-count-badge">{users.length} total</span>
@@ -194,5 +197,6 @@ export default function AdminUsersPage() {
         </div>
       )}
     </div>
+  </>
   );
 }

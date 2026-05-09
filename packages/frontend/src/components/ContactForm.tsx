@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { submitContactForm } from "../api/client";
+import toast from "react-hot-toast";
 
 export default function ContactForm({ collegeName }: { collegeName?: string }) {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ export default function ContactForm({ collegeName }: { collegeName?: string }) {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -19,18 +20,47 @@ export default function ContactForm({ collegeName }: { collegeName?: string }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setIsSubmitting(true);
+
+    // Basic validation
+    if (!formData.name.trim() || !formData.email.trim() || !formData.number.trim() || !formData.date || !formData.time) {
+      toast.error("Please fill in all required fields.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Phone validation
+    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    if (!phoneRegex.test(formData.number)) {
+      toast.error("Please enter a valid phone number.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const res = await submitContactForm({
         ...formData,
         collegeApplyingFor: collegeName || "",
       });
       if (res.success) {
+        toast.success("Thank you! We'll get back to you soon.");
         setSubmitted(true);
         setFormData({ name: "", email: "", number: "", date: "", time: "", message: "" });
+      } else {
+        toast.error(res.error || "Something went wrong. Please try again.");
       }
     } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.");
+      toast.error(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -80,10 +110,8 @@ export default function ContactForm({ collegeName }: { collegeName?: string }) {
           <label htmlFor="message">Your Message (Optional)</label>
           <textarea id="message" name="message" rows={4} value={formData.message} onChange={handleChange} />
 
-          {error && <p style={{ color: "red", marginBottom: 15 }}>{error}</p>}
-
-          <button type="submit" className="form-submit-btn">
-            Send Message <i className="fa fa-paper-plane"></i>
+          <button type="submit" className="form-submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Sending..." : "Send Message"} <i className="fa fa-paper-plane"></i>
           </button>
         </form>
       </div>

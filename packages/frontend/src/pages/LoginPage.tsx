@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import SEO from "../components/SEO";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -36,7 +37,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-page">
+    <>
+      <SEO title="Login" description="Sign in to your Magnma Institute account to access your dashboard and manage your educational journey." noindex />
+      <div className="auth-page">
       <div className="auth-container">
         <div className="auth-header">
           <Link to="/" className="logo">
@@ -112,5 +115,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  </>
   );
 }

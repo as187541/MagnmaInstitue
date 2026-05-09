@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getCourses } from "../api/client";
+import SEO from "../components/SEO";
 
 export default function AllCoursesPage() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -19,7 +20,14 @@ export default function AllCoursesPage() {
   );
 
   return (
-    <main className="main-container all-courses-page">
+    <>
+      <SEO
+        title="Courses"
+        description="Explore popular courses including MBBS, B.Tech, BDS, MBA, and more. Find detailed information about specializations, eligibility, and career opportunities."
+        keywords="MBBS, B.Tech, BDS, MBA, M.Tech, GNM, courses, medical courses, engineering courses"
+        canonical="/courses"
+      />
+      <main className="main-container all-courses-page">
       <h1 className="page-heading">Explore Our Courses</h1>
 
       <div className="in-section-search-bar">
@@ -64,5 +72,6 @@ export default function AllCoursesPage() {
         No courses found matching your search.
       </div>
     </main>
+  </>
   );
 }

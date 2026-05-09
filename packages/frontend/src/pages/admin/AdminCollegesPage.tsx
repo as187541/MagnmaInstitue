@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
+import SEO from "../../components/SEO";
 
 interface College {
   id: string;
@@ -134,7 +135,9 @@ export default function AdminCollegesPage() {
   );
 
   return (
-    <div className="admin-page">
+    <>
+      <SEO title="Manage Colleges" noindex />
+      <div className="admin-page">
       <div className="admin-page-header">
         <h1>Colleges</h1>
         <Link to="/admin/colleges/new" className="btn-primary">
@@ -281,5 +284,6 @@ export default function AdminCollegesPage() {
         </div>
       )}
     </div>
+  </>
   );
 }

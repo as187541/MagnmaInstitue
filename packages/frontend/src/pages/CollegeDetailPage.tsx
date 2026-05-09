@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getCollege } from "../api/client";
 import ContactForm from "../components/ContactForm";
+import SEO from "../components/SEO";
 
 export default function CollegeDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -37,27 +38,42 @@ export default function CollegeDetailPage() {
 
   if (loading) {
     return (
-      <main>
-        <section style={{ textAlign: "center", padding: 100 }}>
-          <p>Loading college details...</p>
-        </section>
-      </main>
+      <>
+        <SEO title="Loading College..." />
+        <main>
+          <section style={{ textAlign: "center", padding: 100 }}>
+            <p>Loading college details...</p>
+          </section>
+        </main>
+      </>
     );
   }
 
   if (!college) {
     return (
-      <main>
+      <>
+        <SEO title="College Not Found" noindex />
+        <main>
         <section style={{ textAlign: "center", padding: 100 }}>
           <h1>College Not Found</h1>
           <p>The college you are looking for does not exist.</p>
         </section>
       </main>
-    );
-  }
+    </>
+  );
+}
 
   return (
-    <main>
+    <>
+      <SEO
+        title={college.name}
+        description={college.description?.substring(0, 160)}
+        keywords={`${college.name}, ${college.location}, ${college.courses?.join(", ")}, medical college, admission`}
+        ogImage={college.logoImage}
+        ogType="article"
+        canonical={`/college/${college.id}`}
+      />
+      <main>
       {/* Hero Slideshow */}
       <section className="college-hero-slideshow">
         <div className="slideshow-container">
@@ -181,5 +197,6 @@ export default function CollegeDetailPage() {
         </div>
       )}
     </main>
+  </>
   );
 }

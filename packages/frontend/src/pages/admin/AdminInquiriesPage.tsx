@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
+import SEO from "../../components/SEO";
 
 interface Inquiry {
   id: string;
@@ -93,7 +94,9 @@ export default function AdminInquiriesPage() {
   }
 
   return (
-    <div className="admin-page">
+    <>
+      <SEO title="Manage Inquiries" noindex />
+      <div className="admin-page">
       <div className="admin-page-header">
         <h1>Inquiries</h1>
         <button className="btn-secondary" onClick={exportToCSV}>
@@ -174,5 +177,6 @@ export default function AdminInquiriesPage() {
         </div>
       )}
     </div>
+  </>
   );
 }

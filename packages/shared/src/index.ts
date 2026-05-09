@@ -90,16 +90,16 @@ export const OFFICE_LOCATIONS: OfficeLocation[] = [
   {
     id: "durgapur",
     city: "Durgapur",
-    address: "A-11 ISPAT PALLY, Bidhannagar",
+    address: "12th St, Bengal Ambuja Housing Complex, Ambuja, Durgapur, West Bengal 713212",
     phone: "+91 7384736917",
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d457.3085369032905!2d87.33641751749151!3d23.51565356906591!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sA-11%20ISPAT%20PALLY%2C%20Bidhannagar!5e0!3m2!1sen!2sin!4v1752135809053!5m2!1sen!2sin",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d457.3085369032905!2d87.33641751749151!3d23.51565356906591!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sA-11%20ISPAT%20PALLY%2C%20Bidhannagar!5e0!3m2!1sen!2sin!4v1752135809053!5m2!1sen!2sin",
   },
   {
     id: "bankura",
     city: "Bankura",
     address: "Junbedia Modh, Bankura Bodra",
     phone: "+91 7384736917",
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14663.001541067042!2d87.04862592361133!3d23.25216874837705!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f7a5fbc33cea67%3A0x1b154af159734264!2sJunbedia%2C%20West%20Bengal!5e0!3m2!1sen!2sin!4v1752135577656!5m2!1sen!2sin",
+    mapSrc: "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.8821911048162!2d87.30144837510824!3d23.536739278816803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f7710030bcc431%3A0x374d8d98a307304b!2sMagnma%20Institute!5e0!3m2!1sen!2sin!4v1778359968875!5m2!1sen!2sin\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>",
   },
   {
     id: "prayagraj",

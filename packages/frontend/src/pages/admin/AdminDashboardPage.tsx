@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { Link } from "react-router-dom";
+import SEO from "../../components/SEO";
 
 interface DashboardStats {
   totalColleges: number;
@@ -81,7 +82,9 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="admin-dashboard">
+    <>
+      <SEO title="Admin Dashboard" noindex />
+      <div className="admin-dashboard">
       <div className="admin-dashboard-header">
         <h1>Dashboard</h1>
         <div className="admin-dashboard-actions">
@@ -193,5 +196,6 @@ export default function AdminDashboardPage() {
         </div>
       </div>
     </div>
+  </>
   );
 }

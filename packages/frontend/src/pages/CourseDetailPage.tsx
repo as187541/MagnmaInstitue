@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getCourse, getCollegesForCourse } from "../api/client";
+import SEO from "../components/SEO";
 
 export default function CourseDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -27,17 +28,22 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <main>
-        <section style={{ textAlign: "center", padding: 100 }}>
-          <p>Loading course details...</p>
-        </section>
-      </main>
+      <>
+        <SEO title="Loading Course..." />
+        <main>
+          <section style={{ textAlign: "center", padding: 100 }}>
+            <p>Loading course details...</p>
+          </section>
+        </main>
+      </>
     );
   }
 
   if (!course) {
     return (
-      <main>
+      <>
+        <SEO title="Course Not Found" noindex />
+        <main>
         <section style={{ textAlign: "center", padding: 100 }}>
           <h1>Course Not Found</h1>
           <p>The course you are looking for does not exist.</p>
@@ -46,8 +52,9 @@ export default function CourseDetailPage() {
           </Link>
         </section>
       </main>
-    );
-  }
+    </>
+  );
+}
 
   const filteredColleges =
     id === "btech" && selectedSpec !== "all"
@@ -66,7 +73,16 @@ export default function CourseDetailPage() {
       : colleges;
 
   return (
-    <main>
+    <>
+      <SEO
+        title={course.name}
+        description={course.description?.substring(0, 160)}
+        keywords={`${course.name}, ${course.specializations?.join(", ")}, course details, admission`}
+        ogImage={course.image}
+        ogType="article"
+        canonical={`/course/${course.id}`}
+      />
+      <main>
       {/* Course Header */}
       <section className="course-header">
         <h1>{course.name}</h1>
@@ -135,5 +151,6 @@ export default function CourseDetailPage() {
         )}
       </section>
     </main>
+  </>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCollege } from "../api/client";
 import { useCompare } from "../contexts/CompareContext";
+import SEO from "../components/SEO";
 
 export default function ComparePage() {
   const { compareIds, clearCompare } = useCompare();
@@ -21,23 +22,29 @@ export default function ComparePage() {
 
   if (loading) {
     return (
-      <main className="main-container">
-        <p style={{ textAlign: "center", padding: 60 }}>Loading comparison...</p>
-      </main>
+      <>
+        <SEO title="Compare Colleges" description="Compare top colleges side by side on fees, rankings, courses, and more at Magnma Institute." canonical="/compare" />
+        <main className="main-container">
+          <p style={{ textAlign: "center", padding: 60 }}>Loading comparison...</p>
+        </main>
+      </>
     );
   }
 
   if (colleges.length === 0) {
     return (
-      <main className="main-container">
-        <div style={{ textAlign: "center", padding: 60 }}>
-          <h1 className="page-heading">Compare Colleges</h1>
-          <p>No colleges selected for comparison.</p>
-          <Link to="/colleges" className="view-more-btn" style={{ marginTop: 20, display: "inline-block" }}>
-            Browse Colleges
-          </Link>
-        </div>
-      </main>
+      <>
+        <SEO title="Compare Colleges" description="Compare top colleges side by side on fees, rankings, courses, and more at Magnma Institute." canonical="/compare" />
+        <main className="main-container">
+          <div style={{ textAlign: "center", padding: 60 }}>
+            <h1 className="page-heading">Compare Colleges</h1>
+            <p>No colleges selected for comparison.</p>
+            <Link to="/colleges" className="view-more-btn" style={{ marginTop: 20, display: "inline-block" }}>
+              Browse Colleges
+            </Link>
+          </div>
+        </main>
+      </>
     );
   }
 

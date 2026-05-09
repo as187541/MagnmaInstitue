@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import SEO from "../../components/SEO";
 
 interface Course {
   id: string;
@@ -191,7 +192,9 @@ export default function AdminCourseRankingsPage() {
   const orderedColleges = selectedCourse ? getOrderedColleges(selectedCourse) : [];
 
   return (
-    <div className="admin-page">
+    <>
+      <SEO title="Course Rankings" noindex />
+      <div className="admin-page">
       <div className="admin-page-header">
         <h1>Course-College Rankings</h1>
         <Link to="/admin/courses" className="btn-secondary">
@@ -342,5 +345,6 @@ export default function AdminCourseRankingsPage() {
         </div>
       )}
     </div>
+  </>
   );
 }

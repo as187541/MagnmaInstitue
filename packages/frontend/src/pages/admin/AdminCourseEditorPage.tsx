@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { uploadImage } from "../../lib/storage";
 import ImageUpload from "../../components/ImageUpload";
+import SEO from "../../components/SEO";
 
 interface CourseFormData {
   id: string;
@@ -138,7 +139,9 @@ export default function AdminCourseEditorPage() {
   }
 
   return (
-    <div className="admin-page">
+    <>
+      <SEO title={isEditing ? "Edit Course" : "Create Course"} noindex />
+      <div className="admin-page">
       <div className="admin-page-header">
         <h1>{isEditing ? "Edit Course" : "Add New Course"}</h1>
       </div>
@@ -222,5 +225,6 @@ export default function AdminCourseEditorPage() {
         </div>
       </form>
     </div>
+  </>
   );
 }
