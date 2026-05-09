@@ -17,6 +17,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [navHidden, setNavHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { toggleTheme } = useTheme();
   const { user, profile, signOut, isStaff } = useAuth();
   const location = useLocation();
@@ -32,6 +33,8 @@ export default function Navbar() {
       } else {
         setNavHidden(false);
       }
+      // Add scrolled state for glass effect
+      setScrolled(currentScrollY > 50);
       lastScrollY = currentScrollY;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -52,7 +55,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className={navHidden ? "nav-hidden" : ""}>
+    <header className={`${navHidden ? "nav-hidden" : ""} ${scrolled ? "nav-scrolled" : ""}`}>
       <nav>
         <div className="logo">
           <Link to="/">
