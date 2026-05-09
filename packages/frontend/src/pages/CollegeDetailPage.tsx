@@ -188,7 +188,32 @@ export default function CollegeDetailPage() {
           </div>
           {enlargedImage && (
             <div className="enlarged-view" onClick={() => setEnlargedImage(null)}>
+              <button
+                className="enlarged-nav-btn enlarged-prev-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const currentIndex = allImages.indexOf(enlargedImage);
+                  const prevIndex = currentIndex > 0 ? currentIndex - 1 : allImages.length - 1;
+                  setEnlargedImage(allImages[prevIndex]);
+                }}
+              >
+                <i className="fa fa-chevron-left"></i>
+              </button>
               <img src={enlargedImage} alt="Enlarged" />
+              <div className="image-counter">
+                {allImages.indexOf(enlargedImage) + 1} / {allImages.length}
+              </div>
+              <button
+                className="enlarged-nav-btn enlarged-next-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const currentIndex = allImages.indexOf(enlargedImage);
+                  const nextIndex = currentIndex < allImages.length - 1 ? currentIndex + 1 : 0;
+                  setEnlargedImage(allImages[nextIndex]);
+                }}
+              >
+                <i className="fa fa-chevron-right"></i>
+              </button>
             </div>
           )}
           <span className="modal-close-btn" onClick={() => setShowModal(false)}>

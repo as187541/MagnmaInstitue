@@ -11,6 +11,7 @@ export default function ComparePage() {
 
   useEffect(() => {
     if (compareIds.length === 0) {
+      setColleges([]);
       setLoading(false);
       return;
     }
