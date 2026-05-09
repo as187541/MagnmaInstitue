@@ -92,14 +92,14 @@ export const OFFICE_LOCATIONS: OfficeLocation[] = [
     city: "Durgapur",
     address: "12th St, Bengal Ambuja Housing Complex, Ambuja, Durgapur, West Bengal 713212",
     phone: "+91 7384736917",
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.0!2d87.3048306!3d23.5635901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s12th%20St%2C%20Bengal%20Ambuja%20Housing%20Complex%2C%20Ambuja%2C%20Durgapur%2C%20West%20Bengal%20713212!5e0!3m2!1sen!2sin!4v1752135809053!5m2!1sen!2sin",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.8821911048162!2d87.30144837510822!3d23.5367392788168!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f7710030bcc431%3A0x374d8d98a307304b!2sMagnma%20Institute!5e0!3m2!1sen!2sin!4v1778360934248!5m2!1sen!2sin",
   },
   {
     id: "bankura",
     city: "Bankura",
     address: "Junbedia Modh, Bankura Bodra",
     phone: "+91 7384736917",
-    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.8821911048162!2d87.30144837510824!3d23.536739278816803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f7710030bcc431%3A0x374d8d98a307304b!2sMagnma%20Institute!5e0!3m2!1sen!2sin!4v1778359968875!5m2!1sen!2sin",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14663.001408933724!2d87.06810995!3d23.25216995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f7a5fbc33cea67%3A0x1b154af159734264!2sJunbedia%2C%20West%20Bengal%20722155!5e0!3m2!1sen!2sin!4v1778360728908!5m2!1sen!2sin",
   },
   {
     id: "prayagraj",
