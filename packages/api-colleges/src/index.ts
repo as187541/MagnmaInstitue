@@ -12,12 +12,16 @@ import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import type { College, ApiResponse } from "@magnma/shared";
+import { sanitizeInput, securityHeaders, rateLimit } from "./security";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:5173" }));
 app.use(express.json());
+app.use(sanitizeInput);
+app.use(securityHeaders);
+app.use(rateLimit(15 * 60 * 1000, 100));
 
 // --- Supabase Client ---
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "";

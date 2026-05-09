@@ -30,7 +30,7 @@ export default function HomePage() {
     getColleges({ featured: true, limit: 10 }).then((res) => {
       if (res.success) setColleges(res.data || []);
     });
-    getCourses().then((res) => {
+    getCourses({ featured: true }).then((res) => {
       if (res.success) setCourses(res.data || []);
     });
     fetchBlogPosts();

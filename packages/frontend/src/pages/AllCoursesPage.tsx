@@ -8,7 +8,7 @@ export default function AllCoursesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCourses().then((res) => {
+    getCourses({ featured: true }).then((res) => {
       if (res.success) setCourses(res.data || []);
       setLoading(false);
     });

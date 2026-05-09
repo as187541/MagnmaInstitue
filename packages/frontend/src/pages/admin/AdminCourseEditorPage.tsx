@@ -14,6 +14,7 @@ interface CourseFormData {
   description: string;
   image: string;
   specializations: string;
+  featured: boolean;
 }
 
 export default function AdminCourseEditorPage() {
@@ -27,6 +28,7 @@ export default function AdminCourseEditorPage() {
     description: "",
     image: "",
     specializations: "",
+    featured: false,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -55,6 +57,7 @@ export default function AdminCourseEditorPage() {
           description: data.description || "",
           image: data.image || "",
           specializations: (data.specializations || []).join("\n"),
+          featured: data.featured || false,
         });
       }
     } catch (err: any) {
@@ -104,6 +107,7 @@ export default function AdminCourseEditorPage() {
         description: form.description.trim(),
         image: form.image.trim(),
         specializations: form.specializations.split("\n").map((s) => s.trim()).filter(Boolean),
+        featured: form.featured,
       };
 
       if (isEditing && id) {
@@ -183,6 +187,17 @@ export default function AdminCourseEditorPage() {
             rows={4}
           />
           <span className="field-hint">Enter each specialization on a new line</span>
+        </div>
+
+        <div className="form-group checkbox-group">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={form.featured}
+              onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+            />
+            <span>Featured (show on homepage)</span>
+          </label>
         </div>
 
         <div className="form-actions">

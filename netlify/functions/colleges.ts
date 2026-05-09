@@ -1,6 +1,7 @@
 // Netlify Function: Colleges API
 import { Handler } from "@netlify/functions";
 import { createClient } from "@supabase/supabase-js";
+import { getSecurityHeaders, getCorsPreflightHeaders, sanitizeString } from "./security";
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || "";
@@ -61,12 +62,12 @@ export const handler: Handler = async (event) => {
     if (method === "GET" && (path === "" || path === "/")) {
       const { search, featured, page, limit } = event.queryStringParameters || {};
       const pageNum = parseInt(page || "1");
-      const limitNum = parseInt(limit || "50");
+      const limitNum = Math.min(parseInt(limit || "50"), 100); // Max 100
 
       let query = supabase.from("colleges").select("*", { count: "exact" });
 
       if (featured === "true") query = query.eq("featured", true);
-      if (search) query = query.ilike("name", `%${search}%`);
+      if (search) query = query.ilike("name", `%${sanitizeString(search)}%`);
 
       const from = (pageNum - 1) * limitNum;
       const to = from + limitNum - 1;
@@ -77,7 +78,7 @@ export const handler: Handler = async (event) => {
 
       return {
         statusCode: 200,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        headers: getSecurityHeaders(),
         body: JSON.stringify({ success: true, data: (data || []).map(mapCollege), total: count || 0 }),
       };
     }
@@ -88,19 +89,19 @@ export const handler: Handler = async (event) => {
       const { data, error } = await supabase.from("colleges").select("*").eq("id", id).single();
       if (error) {
         if (error.code === "PGRST116") {
-          return { statusCode: 404, body: JSON.stringify({ success: false, error: "College not found" }) };
+          return { statusCode: 404, headers: getSecurityHeaders(), body: JSON.stringify({ success: false, error: "College not found" }) };
         }
         throw error;
       }
       return {
         statusCode: 200,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        headers: getSecurityHeaders(),
         body: JSON.stringify({ success: true, data: mapCollege(data) }),
       };
     }
 
-    return { statusCode: 404, body: JSON.stringify({ success: false, error: "Not found" }) };
+    return { statusCode: 404, headers: getSecurityHeaders(), body: JSON.stringify({ success: false, error: "Not found" }) };
   } catch (error: any) {
-    return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
+    return { statusCode: 500, headers: getSecurityHeaders(), body: JSON.stringify({ success: false, error: error.message }) };
   }
 };

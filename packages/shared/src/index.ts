@@ -36,6 +36,7 @@ export interface Course {
   description: string;
   image?: string;
   specializations?: string[];
+  featured?: boolean;
 }
 
 export interface CourseSummary {

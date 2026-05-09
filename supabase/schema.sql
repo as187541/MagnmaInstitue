@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS courses (
   description TEXT NOT NULL DEFAULT '',
   image TEXT NOT NULL DEFAULT '',
   specializations TEXT[] NOT NULL DEFAULT '{}',
+  featured BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

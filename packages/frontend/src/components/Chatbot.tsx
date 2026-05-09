@@ -4,6 +4,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { sanitizeHtml } from "../lib/sanitize";
 import {
   processMessage,
   createInitialContext,
@@ -197,7 +198,7 @@ export default function Chatbot() {
                 )}
                 <div
                   className={`chat-message ${msg.type}-message`}
-                  dangerouslySetInnerHTML={{ __html: msg.text }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(msg.text) }}
                 />
               </div>
 

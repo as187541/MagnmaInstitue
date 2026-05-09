@@ -12,6 +12,7 @@ interface Course {
   name: string;
   description: string;
   image: string;
+  featured: boolean;
   created_at: string;
 }
 
@@ -40,6 +41,22 @@ export default function AdminCoursesPage() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function toggleFeatured(id: string, current: boolean) {
+    const { error } = await supabase
+      .from("courses")
+      .update({ featured: !current })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error updating course:", error);
+      return;
+    }
+
+    setCourses((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, featured: !current } : c))
+    );
   }
 
   async function deleteCourse(id: string) {
@@ -92,6 +109,7 @@ export default function AdminCoursesPage() {
               <tr>
                 <th>Course</th>
                 <th>Description</th>
+                <th>Featured</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -116,6 +134,17 @@ export default function AdminCoursesPage() {
                       {course.description?.substring(0, 80) || "No description"}
                       {course.description?.length > 80 ? "..." : ""}
                     </span>
+                  </td>
+                  <td>
+                    <button
+                      className={`btn-toggle ${course.featured ? "active" : ""}`}
+                      onClick={() => toggleFeatured(course.id, course.featured)}
+                      title={course.featured ? "Unfeature" : "Feature"}
+                    >
+                      <i
+                        className={`fa ${course.featured ? "fa-star" : "fa-star-o"}`}
+                      ></i>
+                    </button>
                   </td>
                   <td className="actions">
                     <Link

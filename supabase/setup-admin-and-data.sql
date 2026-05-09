@@ -27,8 +27,8 @@ INSERT INTO auth.users (
 VALUES (
   gen_random_uuid(),  -- id
   (SELECT instance_id FROM auth.users LIMIT 1),  -- instance_id
-  'admin@magnma.com',  -- email
-  crypt('Admin@123', gen_salt('bf')),  -- encrypted_password (change this!)
+  'aryansingh200228@gmail.com',  -- email
+  crypt('Galvatron18', gen_salt('bf')),  -- encrypted_password (MUST be changed before running!)
   NOW(),  -- email_confirmed_at (auto-confirmed)
   '{"provider":"email","providers":["email"]}',  -- raw_app_meta_data
   '{"full_name":"Admin User"}',  -- raw_user_meta_data
@@ -56,7 +56,7 @@ SELECT
   NOW(),
   NOW()
 FROM auth.users
-WHERE email = 'admin@magnma.com'
+WHERE email = 'aryansingh200228@gmail.com'
 ON CONFLICT (id) DO UPDATE SET role = 'admin';
 
 -- ============================================================

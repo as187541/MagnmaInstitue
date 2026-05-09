@@ -12,12 +12,16 @@ import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import type { Course, College, ApiResponse } from "@magnma/shared";
+import { sanitizeInput, securityHeaders, rateLimit } from "./security";
 
 const app = express();
 const PORT = process.env.PORT || 3002;
 
 app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:5173" }));
 app.use(express.json());
+app.use(sanitizeInput);
+app.use(securityHeaders);
+app.use(rateLimit(15 * 60 * 1000, 100));
 
 // --- Supabase Client ---
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
@@ -41,6 +45,7 @@ function mapCourse(row: any): Course {
     description: row.description || "",
     image: normalizeImagePath(row.image || ""),
     specializations: row.specializations || [],
+    featured: row.featured || false,
   };
 }
 
@@ -49,10 +54,14 @@ function mapCourse(row: any): Course {
 // GET /api/courses - List all courses
 app.get("/api/courses", async (req, res) => {
   try {
-    const { search } = req.query;
+    const { search, featured } = req.query;
 
     if (supabase) {
       let query = supabase.from("courses").select("*");
+
+      if (featured === "true") {
+        query = query.eq("featured", true);
+      }
 
       if (search) {
         query = query.ilike("name", `%${search}%`);
@@ -148,7 +157,8 @@ app.get("/api/courses/:id/colleges", async (req, res) => {
       // (fallback for colleges without explicit ranking entries)
       const { data: allColleges, error: collegesError } = await supabase
         .from("colleges")
-        .select("*");
+        .select("*")
+        .eq("featured", true);
 
       if (collegesError) throw collegesError;
 

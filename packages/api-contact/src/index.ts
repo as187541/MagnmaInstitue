@@ -12,12 +12,16 @@ import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import type { ContactFormData, ApiResponse } from "@magnma/shared";
+import { sanitizeInput, securityHeaders, rateLimit } from "./security";
 
 const app = express();
 const PORT = process.env.PORT || 3003;
 
 app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:5173" }));
 app.use(express.json());
+app.use(sanitizeInput);
+app.use(securityHeaders);
+app.use(rateLimit(15 * 60 * 1000, 100));
 
 // --- Supabase Client ---
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
@@ -31,7 +35,10 @@ if (supabase) {
 }
 
 // --- Web3Forms Fallback ---
-const WEB3FORMS_ACCESS_KEY = process.env.WEB3FORMS_ACCESS_KEY || "b5e631c3-432a-4145-8444-e512fd71a0bc";
+const WEB3FORMS_ACCESS_KEY = process.env.WEB3FORMS_ACCESS_KEY;
+if (!WEB3FORMS_ACCESS_KEY) {
+  console.warn("WEB3FORMS_ACCESS_KEY not set. Web3Forms fallback will be disabled if Supabase insertion fails.");
+}
 
 // --- Routes ---
 
@@ -70,6 +77,13 @@ app.post("/api/contact", async (req, res) => {
       }
 
       console.warn("Supabase insert failed, falling back to Web3Forms:", JSON.stringify(error, null, 2));
+    }
+
+    if (!WEB3FORMS_ACCESS_KEY) {
+      return res.status(500).json({
+        success: false,
+        error: "Contact fallback service unavailable because WEB3FORMS_ACCESS_KEY is not configured.",
+      });
     }
 
     // Fallback to Web3Forms

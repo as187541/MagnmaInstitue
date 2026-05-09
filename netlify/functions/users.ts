@@ -1,6 +1,7 @@
 // Netlify Function: Delete User API (Admin Only)
 import { Handler } from "@netlify/functions";
 import { createClient } from "@supabase/supabase-js";
+import { getSecurityHeaders, getCorsPreflightHeaders } from "./security";
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -11,11 +12,7 @@ export const handler: Handler = async (event) => {
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
+      headers: getCorsPreflightHeaders(),
       body: "",
     };
   }
@@ -23,7 +20,7 @@ export const handler: Handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+      headers: getSecurityHeaders(),
       body: JSON.stringify({ success: false, error: "Method not allowed" }),
     };
   }
@@ -31,7 +28,7 @@ export const handler: Handler = async (event) => {
   if (!supabase) {
     return {
       statusCode: 503,
-      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+      headers: getSecurityHeaders(),
       body: JSON.stringify({ success: false, error: "Supabase service role not configured" }),
     };
   }
@@ -41,7 +38,7 @@ export const handler: Handler = async (event) => {
     if (!userId) {
       return {
         statusCode: 400,
-        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+        headers: getSecurityHeaders(),
         body: JSON.stringify({ success: false, error: "Missing userId" }),
       };
     }
@@ -53,7 +50,7 @@ export const handler: Handler = async (event) => {
     if (!jwt || !anonSupabase) {
       return {
         statusCode: 401,
-        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+        headers: getSecurityHeaders(),
         body: JSON.stringify({ success: false, error: "Unauthorized" }),
       };
     }
@@ -62,7 +59,7 @@ export const handler: Handler = async (event) => {
     if (userError || !user) {
       return {
         statusCode: 401,
-        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+        headers: getSecurityHeaders(),
         body: JSON.stringify({ success: false, error: "Invalid token" }),
       };
     }
@@ -77,7 +74,7 @@ export const handler: Handler = async (event) => {
     if (profileError || !requesterProfile || requesterProfile.role !== "admin") {
       return {
         statusCode: 403,
-        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+        headers: getSecurityHeaders(),
         body: JSON.stringify({ success: false, error: "Forbidden: admin only" }),
       };
     }
@@ -88,7 +85,7 @@ export const handler: Handler = async (event) => {
       console.error("Auth delete error:", deleteAuthError);
       return {
         statusCode: 500,
-        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+        headers: getSecurityHeaders(),
         body: JSON.stringify({ success: false, error: deleteAuthError.message }),
       };
     }
@@ -98,14 +95,14 @@ export const handler: Handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+      headers: getSecurityHeaders(),
       body: JSON.stringify({ success: true, data: { message: "User deleted successfully" } }),
     };
   } catch (error: any) {
     console.error("Delete user error:", error);
     return {
       statusCode: 500,
-      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+      headers: getSecurityHeaders(),
       body: JSON.stringify({ success: false, error: error.message }),
     };
   }

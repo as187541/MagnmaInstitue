@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { sanitizeHtml } from "../lib/sanitize";
 
 interface BlogPost {
   id: string;
@@ -126,7 +127,7 @@ export default function BlogPostPage() {
       {/* Content */}
       <div
         className="blog-post-body"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
       />
 
       {/* Share */}

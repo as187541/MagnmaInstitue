@@ -37,9 +37,15 @@ export async function getCollege(id: string) {
 }
 
 // --- Courses ---
-export async function getCourses(search?: string) {
-  const qs = search ? `?search=${encodeURIComponent(search)}` : "";
-  return fetchApi<any>(`/api/courses${qs}`);
+export async function getCourses(params?: {
+  search?: string;
+  featured?: boolean;
+}) {
+  const query = new URLSearchParams();
+  if (params?.search) query.set("search", params.search);
+  if (params?.featured) query.set("featured", "true");
+  const qs = query.toString();
+  return fetchApi<any>(`/api/courses${qs ? `?${qs}` : ""}`);
 }
 
 export async function getCourse(id: string) {

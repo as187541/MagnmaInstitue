@@ -1,9 +1,30 @@
 const { createClient } = require('@supabase/supabase-js');
+const dotenv = require('dotenv');
+const path = require('path');
+const crypto = require('crypto');
 
-const supabase = createClient(
-  'https://seoddejjuirokaqjjfbl.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlb2RkZWpqdWlyb2thcWpqZmJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNTMzNDUsImV4cCI6MjA4MzcyOTM0NX0.62WEtKpQHSLMJhMClSGU2qP6oQFWkJOhPnTMco4I2zM'
-);
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing Supabase credentials. Copy .env.example to .env and set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.');
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+function generatePassword() {
+  return crypto.randomBytes(12).toString('base64');
+}
+
+const adminEmail = process.env.ADMIN_EMAIL || 'magnma.admin@gmail.com';
+const adminPassword = process.env.ADMIN_PASSWORD || generatePassword();
+
+if (!process.env.ADMIN_PASSWORD) {
+  console.warn('ADMIN_PASSWORD not set. A random password will be generated for the new admin account.');
+}
 
 async function setup() {
   console.log('=== Magnma Institute Supabase Setup ===\n');
@@ -28,12 +49,10 @@ async function setup() {
 
   // 3. Check if we can create a user
   console.log('3. Creating admin user...');
-  const email = 'magnma.admin@gmail.com';
-  const password = 'Admin@123456';
-  
+
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-    email,
-    password,
+    email: adminEmail,
+    password: adminPassword,
     options: {
       data: { full_name: 'Admin User', role: 'admin' }
     }
@@ -48,8 +67,8 @@ async function setup() {
       
       // Try again
       const { data: retryData, error: retryError } = await supabase.auth.signUp({
-        email,
-        password,
+        email: adminEmail,
+        password: adminPassword,
         options: {
           data: { full_name: 'Admin User', role: 'admin' }
         }
@@ -59,15 +78,15 @@ async function setup() {
         console.log('   Retry error:', retryError.message);
       } else {
         console.log('   Admin user created!');
-        console.log('   Email:', email);
-        console.log('   Password:', password);
+        console.log('   Email:', adminEmail);
+        console.log('   Password:', adminPassword);
         console.log('   User ID:', retryData.user?.id);
       }
     }
   } else {
     console.log('   Admin user created successfully!');
-    console.log('   Email:', email);
-    console.log('   Password:', password);
+    console.log('   Email:', adminEmail);
+    console.log('   Password:', adminPassword);
     console.log('   User ID:', signUpData.user?.id);
     console.log('\n   IMPORTANT: Check your email to confirm the account!');
   }

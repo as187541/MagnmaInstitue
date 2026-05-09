@@ -7,9 +7,13 @@ const supabase = supabaseUrl && serviceRoleKey ? createClient(supabaseUrl, servi
 const anonSupabase = supabaseUrl && process.env.VITE_SUPABASE_ANON_KEY ? createClient(supabaseUrl, process.env.VITE_SUPABASE_ANON_KEY) : null;
 
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const corsOrigin = process.env.CORS_ORIGIN || "*";
+  res.setHeader("Access-Control-Allow-Origin", corsOrigin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();

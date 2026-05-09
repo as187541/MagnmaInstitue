@@ -10,7 +10,7 @@ export default function AllCollegesPage() {
   const { compareIds, toggleCompare, isSelected } = useCompare();
 
   useEffect(() => {
-    getColleges().then((res) => {
+    getColleges({ featured: true }).then((res) => {
       if (res.success) setColleges(res.data || []);
       setLoading(false);
     });

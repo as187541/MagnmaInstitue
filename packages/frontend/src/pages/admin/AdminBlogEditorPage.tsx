@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { uploadImage } from "../../lib/storage";
+import { sanitizeHtml } from "../../lib/sanitize";
 import ImageUpload from "../../components/ImageUpload";
 
 interface BlogFormData {
@@ -159,7 +160,7 @@ export default function AdminBlogEditorPage() {
             <p className="blog-excerpt">{form.excerpt}</p>
             <div
               className="blog-content"
-              dangerouslySetInnerHTML={{ __html: form.content }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(form.content) }}
             />
           </article>
         </div>
