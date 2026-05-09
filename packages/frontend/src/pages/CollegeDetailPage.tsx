@@ -81,7 +81,7 @@ export default function CollegeDetailPage() {
             <img
               src={slideshowImages[currentImage % slideshowImages.length]}
               alt={college.name}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           )}
         </div>
