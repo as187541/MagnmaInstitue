@@ -1,0 +1,52 @@
+# ============================================================
+# Netlify Configuration for Magnma Institute
+# ============================================================
+
+[build]
+  # Build command for the frontend
+  command = "npm run build -w packages/frontend"
+  # Directory to publish
+  publish = "packages/frontend/dist"
+  # Base directory (monorepo root)
+  base = "."
+
+# --- API Redirects (Netlify Functions) ---
+[[redirects]]
+  from = "/api/colleges/*"
+  to = "/.netlify/functions/colleges/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/courses/*"
+  to = "/.netlify/functions/courses/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+[[redirects]]
+  from = "/api/users"
+  to = "/.netlify/functions/users"
+  status = 200
+
+# --- SPA Redirects (React Router support) ---
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# --- Headers ---
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# --- Environment Variables (set these in Netlify Dashboard) ---
+# VITE_SUPABASE_URL
+# VITE_SUPABASE_ANON_KEY
+# WEB3FORMS_ACCESS_KEY

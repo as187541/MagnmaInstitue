@@ -1,0 +1,70 @@
+# ============================================================
+# Git Ignore for Magnma Institute
+# ============================================================
+
+# --- Environment Variables & Secrets ---
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+packages/*/.env
+packages/*/.env.local
+
+# --- Node Modules ---
+node_modules/
+packages/*/node_modules/
+
+# --- Build Outputs ---
+dist/
+packages/*/dist/
+build/
+packages/*/build/
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE / Editor ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- TypeScript ---
+*.tsbuildinfo
+
+# --- Testing ---
+coverage/
+packages/*/coverage/
+
+# --- Misc ---
+*.local
+.cache/
+.temp/
+tmp/
+
+# --- Docker ---
+docker-compose.override.yml
+
+# --- Supabase ---
+supabase/.temp/
+supabase/config.toml
+
+# --- Netlify (if using netlify-cli locally) ---
+.netlify/

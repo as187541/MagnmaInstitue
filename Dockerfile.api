@@ -1,0 +1,50 @@
+# ============================================================
+# Dockerfile for Magnma Institute - API Microservices
+# ============================================================
+# Build context: repository root (monorepo)
+# Usage:
+#   docker build -f Dockerfile.api --build-arg SERVICE=api-colleges --build-arg PORT=3001 -t magnma-api-colleges .
+#   docker run -p 3001:3001 --env-file .env magnma-api-colleges
+# ============================================================
+
+# --- Stage 1: Build ---
+FROM node:20-alpine AS builder
+
+ARG SERVICE
+WORKDIR /app
+
+# Copy root workspace configuration
+COPY package.json tsconfig.json ./
+
+# Copy workspace package manifests
+COPY packages/shared/package.json packages/shared/
+COPY packages/${SERVICE}/package.json packages/${SERVICE}/
+
+# Install all dependencies (respects workspaces)
+RUN npm install
+
+# Copy source code
+COPY packages/shared/ packages/shared/
+COPY packages/${SERVICE}/ packages/${SERVICE}/
+
+# Build the service
+RUN npm run build -w packages/${SERVICE}
+
+# --- Stage 2: Run ---
+FROM node:20-alpine
+
+ARG SERVICE
+ARG PORT
+
+WORKDIR /app
+
+# Copy built output and dependencies
+COPY --from=builder /app/packages/${SERVICE}/dist ./dist
+COPY --from=builder /app/packages/${SERVICE}/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
+
+# Expose the service port
+EXPOSE ${PORT}
+
+# Start the compiled service
+CMD ["node", "dist/index.js"]
